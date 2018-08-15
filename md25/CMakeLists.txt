@@ -40,7 +40,6 @@ generate_dynamic_reconfigure_options(
 
 catkin_package(
     DEPENDS Eigen
-    CATKIN_DEPENDS message_runtime
 )
 
 include_directories(
