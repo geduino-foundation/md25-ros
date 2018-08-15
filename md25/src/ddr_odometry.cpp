@@ -75,14 +75,14 @@ void DDROdometry::updatePosition(double ds, double dth) {
     pos(1) += ds * sinmdth;
     pos(2) += dth;
 
-    // Make sure orientation is between [0, 2PI[
+/*    // Make sure orientation is between [0, 2PI[
     while (pos(2) >= TWO_PI) {
         pos(2) -= TWO_PI;
     }
     while (pos(2) < 0) {
         pos(2) += TWO_PI;
     }
-
+*/
 }
 
 void DDROdometry::updateVelocity(double ds, double dth, double dt) {

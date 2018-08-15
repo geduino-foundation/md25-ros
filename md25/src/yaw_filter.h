@@ -26,25 +26,16 @@ class YawFilter {
         // Create new yaw filter with give tau
         YawFilter(double _tau);
 
-        // Filter raw yaw using given velocity
-        void filter(double raw, double velocity, double dTime);
+        // Filter raw yaw using given velocity and return delta yaw
+        double filter(double raw, double velocity, double dTime, double filteredYaw);
 
         // Set filter tau
         void set(double _tau);
-
-        // Get filtered yaw
-        void getYaw(double & _yaw);
-
-        // Get filtered yaw delta with previous value
-        void getDelta(double & _dYaw);
 
     private:
 
         // The filter tau
         double tau;
-
-        // The filtered yaw
-        double yaw, lastYaw;
 
 };
 

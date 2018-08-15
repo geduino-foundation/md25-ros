@@ -18,7 +18,6 @@
 
 #include "md25_odometry.h"
 
-#include <message_filters/subscriber.h>
 #include <nav_msgs/Odometry.h>
 
 #define PI 3.1415926535
@@ -86,8 +85,8 @@ int MD25Odometry::init() {
     encodersSubscriberPtr = boost::make_shared<ros::Subscriber>(encodersSubscriber);
 
     // Init imu message subscriber and cache
-    message_filters::Subscriber<sensor_msgs::Imu> imuSubscriber(nodeHandle, "imu", 1);
-    imuCachePtr.reset(new message_filters::Cache<sensor_msgs::Imu>(imuSubscriber, imuCacheSize));
+    imuSubscriberPtr.reset(new message_filters::Subscriber<sensor_msgs::Imu>(nodeHandle, "imu", 1));
+    imuCachePtr.reset(new message_filters::Cache<sensor_msgs::Imu>(* imuSubscriberPtr, imuCacheSize));
 
     // Init transform listener
     transformListenerPtr.reset(new tf::TransformListener(nodeHandle));
@@ -224,12 +223,12 @@ void MD25Odometry::updateOdometryFiltered(double deltaSpace, double deltaTheta, 
     Vector3 position;
     ddrOdometryPtr->getPosition(position);
 
-    // Update yaw filter
-    yawFilterPtr->filter(position(2), angularVelocityInBaseFrame.vector.z, deltaTime);
+    // Get position from filtered odometry
+    Vector3 filteredPosition;
+    ddrOdometryFilteredPtr->getPosition(filteredPosition);
 
-    // Get filtered delta theta
-    double filteredDeltaTheta;
-    yawFilterPtr->getDelta(filteredDeltaTheta);
+    // Update yaw filter
+    double filteredDeltaTheta = yawFilterPtr->filter(position(2), angularVelocityInBaseFrame.vector.z, deltaTime, filteredPosition(2));
 
     // Update filtered odometry
     ddrOdometryFilteredPtr->update(deltaSpace, filteredDeltaTheta, deltaTime);

@@ -18,36 +18,24 @@
 
 #include "yaw_filter.h"
 
+#include <iostream>
+
 YawFilter::YawFilter(double _tau) :
     tau(_tau) {
-
-    // Set initial yaw
-    yaw = 0;
-    lastYaw = 0;
-
 }
 
-void YawFilter::filter(double raw, double velocity, double dTime) {
-
-    // Set last yaw
-    lastYaw = 0;
+double YawFilter::filter(double raw, double velocity, double dTime, double filteredYaw) {
 
     // Compute filter parameter for current cycle
     double a = tau / (tau + dTime);
 
-    // Filter th
-    yaw = a * (yaw + velocity * dTime) + (1 - a) * raw;
+    // Filter yaw
+    double updatedFilteredYaw = a * (filteredYaw + velocity * dTime) + (1 - a) * raw;
+
+    return updatedFilteredYaw - filteredYaw;
 
 }
 
 void YawFilter::set(double _tau) {
     tau + _tau;
-}
-
-void YawFilter::getYaw(double & _yaw) {
-    _yaw = yaw;
-}
-
-void YawFilter::getDelta(double & _dYaw) {
-    _dYaw = yaw - lastYaw;
 }

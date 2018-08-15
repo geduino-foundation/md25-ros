@@ -23,6 +23,7 @@
 #include <md25_msgs/StampedEncoders.h>
 #include <sensor_msgs/Imu.h>
 #include <message_filters/cache.h>
+#include <message_filters/subscriber.h>
 #include <tf/transform_broadcaster.h>
 #include <tf/transform_listener.h>
 #include <dynamic_reconfigure/server.h>
@@ -105,6 +106,9 @@ class MD25Odometry {
 
         // The encoders subscriber
         boost::shared_ptr<ros::Subscriber> encodersSubscriberPtr;
+
+        // The encoders subscriber
+        boost::shared_ptr<message_filters::Subscriber<sensor_msgs::Imu> > imuSubscriberPtr;
 
         // The imu message cache
         boost::shared_ptr<message_filters::Cache<sensor_msgs::Imu> > imuCachePtr;
