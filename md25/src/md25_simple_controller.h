@@ -32,13 +32,16 @@ class MD25SimpleController {
         // Init MD25 simple controller
         int init();
 
+        // The controller cycle
+        void run();
+
     private:
 
         // The cmd_vel callback
         void cmdVelCallback(const geometry_msgs::Twist::ConstPtr & cmdVel);
 
         // Publish speeds message
-        void publishSpeeds(ros::Time stamp, uint8_t speed1, uint8_t speed2);
+        void publishSpeeds();
 
         // The ROS node handles
         ros::NodeHandle nodeHandle, privateNodeHandle;
@@ -52,6 +55,15 @@ class MD25SimpleController {
         // The wheel diameter
         double wheelDiameter;
 
+        // The speed increment per cycle
+        int speedIncrementPerCycle;
+
+        // The actual speeds
+        uint8_t actualSpeed1, actualSpeed2;
+
+        // The target speeds
+        uint8_t targetSpeed1, targetSpeed2;
+
         // The base frame speeds message will be stamped to
         std::string baseFrame;
 
@@ -60,6 +72,9 @@ class MD25SimpleController {
 
         // The cmd_vel subscriber
         boost::shared_ptr<ros::Subscriber> cmdVelSubscriberPtr;
+
+        // The pointer to controller rate
+        boost::shared_ptr<ros::Rate> controllerRatePtr;
 
 };
 

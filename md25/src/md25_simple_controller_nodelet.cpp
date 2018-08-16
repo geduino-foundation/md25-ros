@@ -18,6 +18,7 @@
 
 #include <pluginlib/class_list_macros.h>
 #include <nodelet/nodelet.h>
+#include <boost/thread.hpp>
 
 #include "md25_simple_controller.h"
 
@@ -43,9 +44,30 @@ namespace md25 {
                 // Init md25 simple controller
                 md25SimpleController->init();
 
+                // Set running to true
+                running = true;
+
+                // Create nodelet thread
+                thread = boost::shared_ptr<boost::thread>(new boost::thread(boost::bind(& MD25SimpleControllerNodelet::main, this)));
+
             }
 
+            void main() {
+
+                while (running) {
+
+                    // Run
+                    md25SimpleController->run();
+
+                }
+
+            }
+
+            bool running;
+
             boost::shared_ptr<MD25SimpleController> md25SimpleController;
+
+            boost::shared_ptr<boost::thread> thread;
 
     };
 

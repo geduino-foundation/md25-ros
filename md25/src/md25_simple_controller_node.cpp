@@ -44,7 +44,14 @@ int main(int argc, char** argv) {
 
     }
 
-    // Spin
-    ros::spin();
+    while (ros::ok()) {
+
+        // Run
+        md25SimpleController.run();
+
+        // Spin
+        ros::spinOnce();
+
+    }
 
 }
