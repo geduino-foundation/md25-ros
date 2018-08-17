@@ -189,7 +189,7 @@ int MD25Driver::init() {
     encodersPublisherPtr = boost::make_shared<ros::Publisher>(encodersPublisher);
 
     // Init diagnostic publisher
-    ros::Publisher diagnosticPublisher = nodeHandle.advertise<diagnostic_msgs::DiagnosticArray>("diagnostics", 20);
+    ros::Publisher diagnosticPublisher = nodeHandle.advertise<diagnostic_msgs::DiagnosticArray>("/diagnostics", 20);
     diagnosticPublisherPtr = boost::make_shared<ros::Publisher>(diagnosticPublisher);
 
     // Init speeds subscriber
@@ -293,8 +293,8 @@ void MD25Driver::speedsCallback(const md25_msgs::StampedSpeedsConstPtr & stamped
     uint8_t speed2 = stampedSpeedsMessage->speeds.speed2;
 
     // Set sppeds on MD25
-    if (md25Ptr->setSpeed1(speed1) == MD25_RESPONSE_OK &&
-         md25Ptr->setSpeed2(speed2) == MD25_RESPONSE_OK) {
+    if (md25Ptr->setSpeed1(speed1) != MD25_RESPONSE_OK ||
+         md25Ptr->setSpeed2(speed2) != MD25_RESPONSE_OK) {
 
         // Log
         ROS_ERROR("Failed to set speeds");

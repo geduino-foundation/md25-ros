@@ -25,7 +25,7 @@ AsleepRate::AsleepRate(double frequency) :
 
 bool AsleepRate::ellapsed(double time) {
 
-    if (lastExecutionTime + duration > time) {
+    if (lastExecutionTime + duration < time) {
 
         // Set last execution time
         lastExecutionTime = time;
